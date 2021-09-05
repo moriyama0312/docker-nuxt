@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    build:
+      context: ./docker/db
+    volumes:
+      - ./docker/db/db_data:/var/lib/mysql
+    restart: always
+  web:
+    depends_on:
+      - db
+    build:
+      context: ./docker/web
+    ports:
+      - "3000:80"
+    volumes:
+      - ./webroot:/var/www/html
+      - ./docker/web/apache/httpd.conf:/etc/httpd/conf/httpd.conf
+    restart: always
+    links:
+      - db
+
+    
